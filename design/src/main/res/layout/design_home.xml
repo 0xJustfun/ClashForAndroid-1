@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="self"
+            type="com.github.kr328.clash.design.HomeDesign" />
+
+        <variable
+            name="clashRunning"
+            type="boolean" />
+        <variable
+            name="forwarded"
+            type="String" />
+        <variable
+            name="mode"
+            type="String" />
+        <variable
+            name="profileName"
+            type="String" />
+        <variable
+            name="colorClashStarted"
+            type="int" />
+        <variable
+            name="colorClashStopped"
+            type="int" />
+        <variable
+            name="hasProviders"
+            type="boolean" />
+
+        <import type="android.view.View" />
+        <import type="com.github.kr328.clash.design.HomeDesign.Request" />
+    </data>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="@{self.surface.insets.start}"
+        android:paddingEnd="@{self.surface.insets.end}">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+                <com.github.lzyzsd.jsbridge.BridgeWebView
+                    android:id="@+id/webView"
+                    android:layout_alignParentTop="true"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" >
+                </com.github.lzyzsd.jsbridge.BridgeWebView>
+
+
+                <ImageView
+                    android:id="@+id/splash"
+                    android:layout_alignParentTop="true"
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/splash"/>
+
+        </RelativeLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</layout>

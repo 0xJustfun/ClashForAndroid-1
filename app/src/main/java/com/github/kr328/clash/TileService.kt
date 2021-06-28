@@ -71,7 +71,7 @@ class TileService : TileService() {
             Tile.STATE_INACTIVE
 
         tile.label = if (currentProfile.isEmpty())
-            getText(R.string.launch_name)
+            getText(R.string.app_name)
         else
             currentProfile
 

@@ -52,6 +52,7 @@ google-services.json
 
 # logs
 *.log
+.DS_Store
 
 # Ignore sum
 /core/src/main/golang/go.sum

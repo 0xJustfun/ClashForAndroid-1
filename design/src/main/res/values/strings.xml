@@ -1,4 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PluralsCandidate">
+
+    <string name="app_name">Real</string>
+
     <string name="launch_name">Clash</string>
     <string name="application_name">Clash for Android</string>
 

@@ -12,7 +12,7 @@ android {
     flavorDimensions(buildFlavor)
 
     defaultConfig {
-        applicationId = "com.github.kr328.clash"
+        applicationId = "app.really.vpn"
 
         minSdk = buildMinSdkVersion
         targetSdk = buildTargetSdkVersion
@@ -44,8 +44,8 @@ android {
     productFlavors {
         create("foss") {
             dimension = "foss"
-            versionNameSuffix = ".foss"
-            applicationIdSuffix = ".foss"
+//            versionNameSuffix = ".foss"
+//            applicationIdSuffix = ".foss"
         }
         create("premium") {
             dimension = "premium"
@@ -133,6 +133,10 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:$recyclerviewVersion")
     implementation("androidx.fragment:fragment:$fragmentVersion")
     implementation("com.google.android.material:material:$materialVersion")
+
+    implementation("com.github.lzyzsd:jsbridge:1.0.4")
+    implementation("com.blankj:utilcodex:1.30.6")
+    implementation("com.liulishuo.filedownloader:library:1.7.7")
 }
 
 task("cleanRelease", type = Delete::class) {

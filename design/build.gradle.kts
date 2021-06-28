@@ -67,4 +67,6 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:$recyclerviewVersion")
     implementation("androidx.fragment:fragment:$fragmentVersion")
     implementation("androidx.viewpager2:viewpager2:$viewpagerVersion")
+
+    implementation("com.github.lzyzsd:jsbridge:1.0.4")
 }

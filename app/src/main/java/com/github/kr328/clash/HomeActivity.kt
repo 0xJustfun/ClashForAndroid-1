@@ -1,12 +1,10 @@
 package com.github.kr328.clash
 
 // add
+
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -32,6 +30,8 @@ import com.github.kr328.clash.util.withClash
 import com.github.kr328.clash.util.withProfile
 import com.github.lzyzsd.jsbridge.BridgeWebView
 import com.github.lzyzsd.jsbridge.CallBackFunction
+import com.koushikdutta.async.http.server.AsyncHttpServer
+import com.koushikdutta.async.http.server.HttpServerRequestCallback
 import com.liulishuo.filedownloader.BaseDownloadTask
 import com.liulishuo.filedownloader.FileDownloadListener
 import com.liulishuo.filedownloader.FileDownloader
@@ -41,8 +41,6 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.io.File
 import java.io.FileWriter
-import java.nio.charset.StandardCharsets
-import java.nio.file.Files
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -52,6 +50,8 @@ class HomeActivity : BaseActivity<HomeDesign>() {
 
     private var webview: BridgeWebView? = null
     private var wv: WebView? = null
+
+    private var userLogin: JSONObject? = null
 
     private var clashOption: JSONObject? = null
     private var ts:Long = 0;
@@ -64,6 +64,7 @@ class HomeActivity : BaseActivity<HomeDesign>() {
         super.onCreate(savedInstanceState)
 
         FileDownloader.setup(this);
+        this.startHttp()
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -197,12 +198,8 @@ class HomeActivity : BaseActivity<HomeDesign>() {
         val active = withProfile { queryActive() }
 
         if (active == null || !active.imported) {
-            showToast(R.string.no_profile_selected, ToastDuration.Long) {
-                setAction(R.string.profiles) {
-                    startActivity(ProfilesActivity::class.intent)
-                }
-            }
-
+            design?.showToast(R.string.no_profile_selected, ToastDuration.Long)
+            sendToH5("","")
             return
         }
 
@@ -227,6 +224,20 @@ class HomeActivity : BaseActivity<HomeDesign>() {
         return withContext(Dispatchers.IO) {
             packageManager.getPackageInfo(packageName, 0).versionName
         }
+    }
+
+    private fun startHttp(){
+        val server = AsyncHttpServer()
+
+
+        server["/", HttpServerRequestCallback { request, response -> response.send("Hello Real!") }]
+
+        server["/info", HttpServerRequestCallback { request, response ->
+            var userInfo = if(userLogin !== null) userLogin.toString() else ""
+            response.send(userInfo)
+        }]
+
+        server.listen(7892)
     }
 
 
@@ -295,11 +306,11 @@ class HomeActivity : BaseActivity<HomeDesign>() {
         Log.d("H5AppLogs requsetAction", "initView")
 
         if(BuildConfig.DEBUG){
-            webview!!.loadUrl("http://192.168.88.28:8081");
+            webview!!.loadUrl("http://192.168.88.44:8080");
         }else{
             var link = getSavePath("h5/index.html")
             var bool = FileUtils.isFileExists(link)
-            Log.d("H5AppLogs requsetAction", ""+bool+","+link,)
+            Log.d("H5AppLogs requsetAction", "" + bool + "," + link)
             if (!bool){
                 initZip("")
             }
@@ -333,15 +344,17 @@ class HomeActivity : BaseActivity<HomeDesign>() {
             if ("init" == action) {
                 initH5Data()
                 finishSplash()
-            } else if("device" == action){
+            } else if("user" == action){
+                userLogin = data.getJSONObject("data")
+            }  else if("device" == action){
                 finishSplash()
                 AppInfo()
-            }else if ("toast" == action) {
+            } else if ("toast" == action) {
                 Toast.makeText(this, data.getString("data"), Toast.LENGTH_SHORT).show()
             } else if ("copy" == action) {
                 ClipboardUtils.copyText(data.getString("data"))
                 Toast.makeText(this, "复制成功", Toast.LENGTH_SHORT).show()
-            }  else if ("main" == action) {
+            } else if ("main" == action) {
                 startActivity(Intent(this, MainActivity::class.java))
             } else if ("link" == action) {
                 wv!!.loadUrl(data.getString("data"))

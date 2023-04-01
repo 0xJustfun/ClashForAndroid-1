@@ -137,6 +137,8 @@ dependencies {
     implementation("com.github.lzyzsd:jsbridge:1.0.4")
     implementation("com.blankj:utilcodex:1.30.6")
     implementation("com.liulishuo.filedownloader:library:1.7.7")
+    implementation("com.koushikdutta.async:androidasync:2.+")
+
 }
 
 task("cleanRelease", type = Delete::class) {

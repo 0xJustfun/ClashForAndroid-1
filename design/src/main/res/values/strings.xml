@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PluralsCandidate">
 
-    <string name="app_name">Real</string>
+    <string name="app_name">NePx</string>
 
     <string name="launch_name">Clash</string>
     <string name="application_name">Clash for Android</string>
@@ -179,7 +179,7 @@
 
     <string name="force_enable">Force Enable</string>
 
-    <string name="mapping">Real-IP to domain mapping</string>
+    <string name="mapping">NePx-IP to domain mapping</string>
     <string name="fakeip">Fake-IP to domain mapping</string>
 
     <string name="system_apps">System Apps</string>

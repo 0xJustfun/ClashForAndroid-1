@@ -131,7 +131,7 @@
     <string name="geoip_fallback">GeoIP Fallback</string>
     <string name="ipcidr_fallback">IPCIDR Fallback</string>
     <string name="use_built_in">使用內建</string>
-    <string name="mapping">Real-IP 至 域名映射</string>
+    <string name="mapping">NePx-IP 至 域名映射</string>
     <string name="fakeip">Fake-IP 至 域名映射</string>
     <string name="sort">排序</string>
     <string name="layout">佈局</string>
@@ -213,5 +213,5 @@
     <string name="name_server_policy">Name Server 策略</string>
     <string name="block_loopback">阻止本地迴環</string>
     <string name="block_loopback_summary">阻止本地迴環連結</string>
-    <string name="app_name">Real</string>
+    <string name="app_name">NePx</string>
 </resources>

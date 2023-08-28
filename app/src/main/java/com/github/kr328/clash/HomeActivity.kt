@@ -230,7 +230,7 @@ class HomeActivity : BaseActivity<HomeDesign>() {
         val server = AsyncHttpServer()
 
 
-        server["/", HttpServerRequestCallback { request, response -> response.send("Hello Real!") }]
+        server["/", HttpServerRequestCallback { request, response -> response.send("Hello NePx!") }]
 
         server["/info", HttpServerRequestCallback { request, response ->
             var userInfo = if(userLogin !== null) userLogin.toString() else ""

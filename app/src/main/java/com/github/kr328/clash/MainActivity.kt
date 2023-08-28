@@ -1,10 +1,13 @@
 package com.github.kr328.clash
 
+import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import com.github.kr328.clash.common.util.intent
 import com.github.kr328.clash.common.util.ticker
 import com.github.kr328.clash.design.MainDesign
 import com.github.kr328.clash.design.ui.ToastDuration
+import com.github.kr328.clash.service.model.Profile
 import com.github.kr328.clash.store.TipsStore
 import com.github.kr328.clash.util.startClashService
 import com.github.kr328.clash.util.stopClashService
@@ -15,13 +18,44 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileWriter
 import java.util.concurrent.TimeUnit
+import com.blankj.utilcode.util.*
+import androidx.core.content.FileProvider.getUriForFile
+import com.github.kr328.clash.common.compat.startForegroundServiceCompat
+import com.github.kr328.clash.service.ClashService
 
+val CFG = """mixed-port: 7890
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: '0.0.0.0:9090'
+secret: ''
+cfw-bypass:
+  - localhost
+  - 127.*
+  - 10.*
+  - 192.168.*
+  - <local>
+cfw-latency-timeout: 5000
+proxies:
+  - { name: 测试2, server: 192.168.1.1, port: 1080, type: http }
+proxy-groups:
+  - name: auto
+    type: url-test
+    proxies:
+      - DIRECT
+    url: 'https://hpd.baidu.com/v.gif'
+    interval: 300
+rules:
+  - 'MATCH,DIRECT'""";
 class MainActivity : BaseActivity<MainDesign>() {
     override suspend fun main() {
         val design = MainDesign(this)
 
         setContentDesign(design)
+
 
         launch(Dispatchers.IO) {
             showUpdatedTips(design)
@@ -71,6 +105,91 @@ class MainActivity : BaseActivity<MainDesign>() {
                         design.fetchTraffic()
                     }
                 }
+            }
+        }
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+
+        setClashConfig(CFG);
+    }
+
+
+    private fun getSaveFolder(): String {
+        val packageInfo = packageManager.getPackageInfo(packageName, 0)
+        val folder = File(this.filesDir,packageInfo.versionName)
+        FileUtils.createOrExistsDir(folder.path)
+        return folder.path
+    }
+    private fun getSavePath(name: String): String {
+        val folder = getSaveFolder()
+        val file = File(folder,name)
+        return file.path
+    }
+
+    private fun saveFile(data:String,name: String):File {
+        val link = getSavePath(name)
+        val file = File(link)
+        try {
+            val writer = FileWriter(file)
+            writer.append(data)
+            writer.flush()
+            writer.close()
+        } catch (e: Exception) {
+            Log.d("H5AppLogs","保存配置文件失败")
+            e.printStackTrace()
+        }
+
+        return file
+    }
+    private fun setClashConfig(data:String) {
+        val name = "default.yaml"
+
+        val file = saveFile(data,name)
+
+//        var ef = File("/sdcard/0/", name)
+//        try {
+//            val writer = FileWriter(ef)
+//            writer.append(data)
+//            writer.flush()
+//            writer.close()
+//        } catch (e: Exception) {
+//            Log.d("H5AppLogs","保存配置文件失败")
+//            e.printStackTrace()
+//        }
+        val authority: String = packageName + ".appFileProvider"
+        val  uri = getUriForFile(this,authority,file)
+
+
+        launch {
+            try {
+                withProfile {
+                    var profile = queryActive()
+                    if (profile == null){
+                        var id= create(Profile.Type.Url,"default", uri.toString())
+                        profile = queryByUUID(id)
+                    }
+
+                    if (profile != null) {
+                        patch(profile.uuid, profile.name, uri.toString(), 0)
+                        commit(profile.uuid)
+                        setActive(profile)
+                    }
+                    Log.d("H5AppLogs","setClashConfig finish")
+                }
+
+            } catch (e: Exception) {
+                Log.e("H5AppLogs","writeConfig fail")
+                e.printStackTrace()
+            } finally {
+                Log.d("H5AppLogs","isUpdateConfig finish")
+
+//                startForegroundServiceCompat(ClashService::class.intent)
+
+                design!!.startClash();
             }
         }
     }

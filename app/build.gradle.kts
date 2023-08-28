@@ -12,7 +12,7 @@ android {
     flavorDimensions(buildFlavor)
 
     defaultConfig {
-        applicationId = "app.really.vpn"
+        applicationId = "app.net.proxy"
 
         minSdk = buildMinSdkVersion
         targetSdk = buildTargetSdkVersion

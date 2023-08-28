@@ -59,7 +59,7 @@
                     android:minHeight="@dimen/main_top_banner_height"
                     android:orientation="horizontal">
 
-                    <FrameLayout
+                    <!-- <FrameLayout
                         android:layout_width="@dimen/large_item_header_layout_size"
                         android:layout_height="@dimen/large_item_header_layout_size">
 
@@ -69,12 +69,12 @@
                             android:layout_gravity="center"
                             android:background="@drawable/ic_clash"
                             android:backgroundTint="?attr/colorLogo" />
-                    </FrameLayout>
+                    </FrameLayout> -->
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/launch_name"
+                        android:text="@string/app_name"
                         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
                 </LinearLayout>
 
@@ -89,7 +89,7 @@
                     app:subtext="@{clashRunning ? @string/format_traffic_forwarded(forwarded) : @string/tap_to_start}"
                     app:text="@{clashRunning ? @string/running : @string/stopped}" />
 
-                <com.github.kr328.clash.design.view.LargeActionCard
+                <!-- <com.github.kr328.clash.design.view.LargeActionCard
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginVertical="@dimen/main_card_margin_vertical"
@@ -147,7 +147,7 @@
                     android:layout_marginVertical="@dimen/main_label_margin_vertical"
                     android:onClick="@{() -> self.request(Request.OpenAbout)}"
                     app:icon="@drawable/ic_baseline_info"
-                    app:text="@string/about" />
+                    app:text="@string/about" /> -->
             </LinearLayout>
         </ScrollView>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

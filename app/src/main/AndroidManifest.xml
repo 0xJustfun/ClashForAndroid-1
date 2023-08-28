@@ -50,7 +50,7 @@
         </provider>
 
         <activity
-            android:name=".HomeActivity"
+            android:name=".MainActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:label="@string/app_name"
@@ -67,12 +67,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
-            android:configChanges="uiMode"
-            android:exported="true"
-            android:label="@string/app_name">
-        </activity>
-        <activity
             android:name=".ExternalImportActivity"
             android:exported="true"
             android:label="@string/import_from_file"
@@ -85,7 +79,7 @@
 
                 <data
                     android:host="install-config"
-                    android:scheme="real" />
+                    android:scheme="NePx" />
             </intent-filter>
         </activity>
         <activity
